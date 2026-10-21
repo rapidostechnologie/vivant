@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Vivant — Services</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#12814B}a:hover{color:#0F1113}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; display: flex; flex-direction: column; background: #FFFFFF; color: #0F1113; font-family: 'Outfit', system-ui, sans-serif">
+  <div style="flex: 1; padding: 56px 24px 0; display: flex; flex-direction: column">
+    <a href="Accueil.dc.html" aria-label="Retour" style="width: 44px; height: 44px; margin-left: -8px; display: flex; align-items: center; justify-content: center; color: #0F1113">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <h1 style="margin: 10px 0 0; font-size: 34px; font-weight: 800; letter-spacing: -0.8px">Services</h1>
+    
+    <label for="recherche" style="margin-top: 18px; display: flex; align-items: center; gap: 10px; height: 50px; padding: 0 16px; border-radius: 14px; background: #F3F4F6; color: #5F6368">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4.5 4.5"></path></svg>
+      <input id="recherche" placeholder="Chercher un service" aria-label="Chercher un service" style="flex: 1; min-width: 0; border: 0; background: transparent; color: #0F1113; font: 500 16px 'Outfit', sans-serif; outline: none">
+    </label>
+
+    <div style="margin-top: 14px; display: flex; gap: 8px; flex-wrap: wrap">
+      <button style="height: 36px; padding: 0 14px; border: 0; border-radius: 999px; background: #0F1113; color: #FFFFFF; font: 600 14px 'Outfit', sans-serif">Tous</button>
+      <button style="height: 36px; padding: 0 14px; border: 0; border-radius: 999px; background: #F3F4F6; color: #0F1113; font: 600 14px 'Outfit', sans-serif">État</button>
+      <button style="height: 36px; padding: 0 14px; border: 0; border-radius: 999px; background: #F3F4F6; color: #0F1113; font: 600 14px 'Outfit', sans-serif">Banques</button>
+      <button style="height: 36px; padding: 0 14px; border: 0; border-radius: 999px; background: #F3F4F6; color: #0F1113; font: 600 14px 'Outfit', sans-serif">Santé</button>
+    </div>
+
+    <div style="margin-top: 14px; display: flex; flex-direction: column">
+      <div style="display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid #F3F4F6">
+        <span style="width: 44px; height: 44px; border-radius: 14px; background: #EAFAF2; color: #12814B; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800">eS</span>
+        <span style="flex: 1; font-size: 17px; font-weight: 600">Portail e-Services</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid #F3F4F6">
+        <span style="width: 44px; height: 44px; border-radius: 14px; background: #EAFAF2; color: #12814B; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800">IM</span>
+        <span style="flex: 1; font-size: 17px; font-weight: 600">Impôts en ligne</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid #F3F4F6">
+        <span style="width: 44px; height: 44px; border-radius: 14px; background: #EAFAF2; color: #12814B; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800">BD</span>
+        <span style="flex: 1; font-size: 17px; font-weight: 600">Banque Démo</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid #F3F4F6">
+        <span style="width: 44px; height: 44px; border-radius: 14px; background: #EAFAF2; color: #12814B; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800">CS</span>
+        <span style="flex: 1; font-size: 17px; font-weight: 600">Clinique Santé Plus</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 14px; padding: 12px 0">
+        <span style="width: 44px; height: 44px; border-radius: 14px; background: #EAFAF2; color: #12814B; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800">AS</span>
+        <span style="flex: 1; font-size: 17px; font-weight: 600">Assurance Sahel</span>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+{{template "phead" .}}
+{{$p := .Partner}}
+<section class="wrap dash">
+  <div class="dash-head">
+    <div>
+      <h1>{{$p.OrgName}}</h1>
+      <p class="muted">{{$p.Sector}} · {{$p.Email}}</p>
+    </div>
+    {{if eq $p.Mode "live"}}<span class="badge badge-live">Production</span>
+    {{else if eq $p.Mode "review"}}<span class="badge badge-review">Vérification en cours</span>
+    {{else}}<span class="badge badge-test">Mode test</span>{{end}}
+  </div>
+
+  {{if .Notice}}<p class="alert alert-ok" role="status">{{.Notice}}</p>{{end}}
+  {{if .Error}}<p class="alert alert-error" role="alert">{{.Error}}</p>{{end}}
+
+  <div class="stats">
+    <div class="stat"><span class="stat-n">{{$p.Stats.Requests}}</span><span class="stat-l">Demandes</span></div>
+    <div class="stat"><span class="stat-n">{{$p.Stats.Approved}}</span><span class="stat-l">Confirmées</span></div>
+    <div class="stat"><span class="stat-n">{{$p.Stats.Denied}}</span><span class="stat-l">Refusées</span></div>
+  </div>
+
+  <div class="panel" id="cles">
+    <div class="panel-head">
+      <h2>Clés API</h2>
+      <form method="post" action="/partenaires/cle"><button class="btn btn-ghost btn-sm" type="submit">Régénérer la clé secrète</button></form>
+    </div>
+    <div class="kv">
+      <span class="k">Identifiant (public)</span>
+      <span class="v"><code id="client-id">{{$p.ClientID}}</code>{{template "copy" $p.ClientID}}</span>
+    </div>
+    <div class="kv">
+      <span class="k">Clé secrète</span>
+      {{if .NewSecret}}
+        <span class="v"><code class="secret">{{.NewSecret}}</code>{{template "copy" .NewSecret}}</span>
+      {{else}}
+        <span class="v"><code>sk_{{$p.Mode}}_••••••••••••{{$p.SecretHint}}</code></span>
+      {{end}}
+    </div>
+    <p class="small muted">Gardez la clé secrète sur votre serveur. Ne la mettez jamais dans une application mobile ou une page web.</p>
+  </div>
+
+  <div class="panel" id="retours">
+    <h2>Adresses de retour</h2>
+    <p class="muted">Vivant renvoie la personne sur ces adresses après la vérification.</p>
+    <ul class="list">
+      {{range $p.RedirectURIs}}
+      <li>
+        <code>{{.}}</code>
+        <form method="post" action="/partenaires/retours/supprimer"><input type="hidden" name="url" value="{{.}}"><button class="linklike danger" type="submit">Retirer</button></form>
+      </li>
+      {{else}}
+      <li class="muted">Aucune adresse.</li>
+      {{end}}
+    </ul>
+    <form method="post" action="/partenaires/retours" class="inline-form">
+      <label for="url" class="sr-only">Nouvelle adresse de retour</label>
+      <input id="url" name="url" placeholder="https://votre-site.com/retour" inputmode="url" required>
+      <button class="btn btn-sm" type="submit">Ajouter</button>
+    </form>
+  </div>
+
+  <div class="panel" id="donnees">
+    <h2>Données demandées</h2>
+    <p class="muted">Ne demandez que le nécessaire : la personne voit chaque donnée avant d'accepter.</p>
+    <form method="post" action="/partenaires/donnees" class="checklist">
+      {{range .Scopes}}
+      <label class="check"><input type="checkbox" name="{{.Name}}" {{if .Checked}}checked{{end}}><span><strong>{{.Name}}</strong> · {{.Label}}</span></label>
+      {{end}}
+      <button class="btn btn-sm" type="submit">Enregistrer</button>
+    </form>
+  </div>
+
+  <div class="panel">
+    <h2>Tester maintenant</h2>
+    <p class="muted">Collez cette commande dans un terminal, en remplaçant la clé par la vôtre.</p>
+    <div class="codeblock">
+      <button class="copy" type="button" data-copy-block aria-label="Copier le code">Copier</button>
+<pre><code>curl {{.Issuer}}/v1/verifications \
+  -H "Authorization: Bearer {{if .NewSecret}}{{.NewSecret}}{{else}}VOTRE_CLE_SECRETE{{end}}" \
+  -H "Content-Type: application/json" \
+  -d '{"redirect_url": "{{if $p.RedirectURIs}}{{index $p.RedirectURIs 0}}{{else}}https://votre-site.com/retour{{end}}", "data": ["profile"]}'</code></pre>
+    </div>
+    <p class="small"><a href="/docs">Voir le code complet en Node.js, PHP et Python →</a></p>
+  </div>
+
+  {{if eq $p.Mode "test"}}
+  <div class="panel panel-green">
+    <div>
+      <h2>Prêt pour la production ?</h2>
+      <p>Nous vérifions votre organisation (registre du commerce, représentant légal), puis nous activons vos clés de production.</p>
+    </div>
+    <form method="post" action="/partenaires/production"><button class="btn btn-dark" type="submit">Demander la production</button></form>
+  </div>
+  {{end}}
+</section>
+{{template "pfoot" .}}

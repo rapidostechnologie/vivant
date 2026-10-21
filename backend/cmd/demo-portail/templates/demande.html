@@ -1,0 +1,15 @@
+{{template "head" .}}
+<section class="panel">
+  <div class="verified"><span class="check" aria-hidden="true">✓</span>Demande enregistrée</div>
+  <h1>{{.Document}}</h1>
+  <dl class="identity">
+    <dt>Référence</dt><dd><strong>{{.Ref}}</strong></dd>
+    <dt>Demandeur</dt><dd>{{.ID.FullName}}</dd>
+    <dt>Né(e) le</dt><dd>{{.ID.BirthDate}} à {{.ID.BirthPlace}}</dd>
+    <dt>NIN</dt><dd>{{.ID.NIN}}</dd>
+    <dt>Identité</dt><dd>Vérifiée par Vivant (carte d'identité, visage et téléphone)</dd>
+  </dl>
+  <p class="muted small">Le demandeur a été authentifié par son téléphone personnel et son code PIN : la demande ne peut pas avoir été faite par une autre personne.</p>
+  <a class="btn" href="/espace">Retour à mon espace</a>
+</section>
+{{template "foot" .}}

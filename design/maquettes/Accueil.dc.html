@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Vivant — Accueil</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#FFFFFF}a:hover{color:#7FE3B2}
+</style>
+</helmet>
+<div style="position: relative; width: 390px; height: 844px; overflow: hidden; background: #0F1113; color: #FFFFFF; font-family: 'Outfit', system-ui, sans-serif">
+  <div style="position: absolute; left: -125px; top: 40px; width: 640px; height: 640px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.06)"></div>
+  <div style="position: absolute; left: -45px; top: 120px; width: 480px; height: 480px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.08)"></div>
+  <div style="position: absolute; left: 35px; top: 200px; width: 320px; height: 320px; border-radius: 50%; background: rgba(52,209,134,0.10)"></div>
+
+  <div style="position: relative; height: 100%; display: flex; flex-direction: column; align-items: center">
+    <div style="width: 100%; box-sizing: border-box; padding: 56px 20px 0; display: flex; justify-content: flex-end">
+      <button aria-label="Notifications" style="width: 48px; height: 48px; border: 0; border-radius: 50%; background: rgba(255,255,255,0.10); color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15z"></path><path d="M10 20.5a2 2 0 0 0 4 0"></path></svg>
+      </button>
+    </div>
+
+    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: -40px">
+      <div style="position: relative; width: 108px; height: 108px; border-radius: 34px; background: #34D186; display: flex; align-items: center; justify-content: center; box-shadow: 0 20px 50px rgba(52,209,134,0.35)">
+        <svg width="62" height="62" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="11" r="5.5" fill="#0F1113"></circle><path d="M10 21 L24 39 L38 21" fill="none" stroke="#0F1113" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span style="position: absolute; right: -8px; top: -8px; width: 24px; height: 24px; border-radius: 50%; background: #FFFFFF; border: 4px solid #0F1113"></span>
+      </div>
+      <h1 style="margin: 28px 0 0; font-family: 'DM Serif Display', Georgia, serif; font-size: 60px; font-weight: 400; line-height: 1">Fatou</h1>
+      <span style="margin-top: 16px; display: flex; align-items: center; gap: 6px; height: 34px; padding: 0 14px; border-radius: 999px; background: rgba(52,209,134,0.16); color: #7FE3B2; font-size: 15px; font-weight: 600">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+        Identité vérifiée
+      </span>
+    </div>
+
+    <nav aria-label="Navigation principale" style="width: 100%; box-sizing: border-box; padding: 0 28px 34px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end">
+      <a href="Services.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; font-weight: 600">
+        <span style="width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.10); display: flex; align-items: center; justify-content: center">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="2"></rect><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"></rect><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"></rect><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"></rect></svg>
+        </span>
+        Services
+      </a>
+      <a href="Notification.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; font-size: 15px; font-weight: 700">
+        <span style="width: 80px; height: 80px; border-radius: 50%; background: #34D186; color: #0F1113; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 28px rgba(52,209,134,0.4)">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8V5a1 1 0 0 1 1-1h3M16 4h3a1 1 0 0 1 1 1v3M20 16v3a1 1 0 0 1-1 1h-3M8 20H5a1 1 0 0 1-1-1v-3"></path><path d="M7.5 12h9"></path></svg>
+        </span>
+        Scanner
+      </a>
+      <a href="Profil.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; font-weight: 600">
+        <span style="width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.10); display: flex; align-items: center; justify-content: center">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5"></circle><path d="M5 20c1-3.5 3.7-5.5 7-5.5s6 2 7 5.5"></path></svg>
+        </span>
+        Profil
+      </a>
+    </nav>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

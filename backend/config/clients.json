@@ -1,0 +1,9 @@
+[
+  {
+    "client_id": "portail-demo",
+    "name": "Portail e-Services (démo)",
+    "client_secret": "demo-secret-a-changer",
+    "redirect_uris": ["http://localhost:8081/callback"],
+    "scopes": ["openid", "profile", "birth", "nin", "phone", "address"]
+  }
+]

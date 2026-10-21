@@ -1,0 +1,10 @@
+{{template "head" .}}
+<div id="wait" data-req="{{.ReqID}}">
+  <h1>Confirmez sur votre téléphone</h1>
+  <p>Ouvrez l'application {{.AppName}} et choisissez ce code :</p>
+  <div class="code" id="binding-code">{{.BindingCode}}</div>
+  <p class="status" id="status" aria-live="polite">En attente de votre confirmation…</p>
+  <p class="muted small">Vous n'êtes pas à l'origine de cette connexion à {{.ClientName}} ? Refusez la demande dans l'application.</p>
+</div>
+<script src="/static/wait.js"></script>
+{{template "foot" .}}

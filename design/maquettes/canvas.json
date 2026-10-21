@@ -1,0 +1,184 @@
+{
+  "v": 3,
+  "createdOnFiles": {
+    "v": 1,
+    "at": "2026-10-18T23:20:00Z"
+  },
+  "title": "Vivant — App mobile",
+  "launch": {
+    "view": "canvas"
+  },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {
+      "x": 0,
+      "y": 300,
+      "w": 390,
+      "h": 844,
+      "title": "1 · Bienvenue",
+      "radius": 40
+    },
+    "Identification.dc.html": {
+      "x": 470,
+      "y": 300,
+      "w": 390,
+      "h": 844,
+      "title": "2 · Numéro",
+      "radius": 40
+    },
+    "ScanCarte.dc.html": {
+      "x": 940,
+      "y": 300,
+      "w": 390,
+      "h": 844,
+      "title": "3 · Carte",
+      "radius": 40
+    },
+    "Selfie.dc.html": {
+      "x": 1410,
+      "y": 300,
+      "w": 390,
+      "h": 844,
+      "title": "4 · Visage",
+      "radius": 40
+    },
+    "CodePin.dc.html": {
+      "x": 1880,
+      "y": 300,
+      "w": 390,
+      "h": 844,
+      "title": "5 · Code secret",
+      "radius": 40
+    },
+    "Accueil.dc.html": {
+      "x": 0,
+      "y": 1564,
+      "w": 390,
+      "h": 844,
+      "title": "6 · Accueil",
+      "radius": 40
+    },
+    "Notification.dc.html": {
+      "x": 470,
+      "y": 1564,
+      "w": 390,
+      "h": 844,
+      "title": "7 · Demande reçue",
+      "radius": 40
+    },
+    "Demande.dc.html": {
+      "x": 940,
+      "y": 1564,
+      "w": 390,
+      "h": 844,
+      "title": "8 · Confirmer",
+      "radius": 40
+    },
+    "Confirme.dc.html": {
+      "x": 1410,
+      "y": 1564,
+      "w": 390,
+      "h": 844,
+      "title": "9 · Connecté",
+      "radius": 40
+    },
+    "Services.dc.html": {
+      "x": 0,
+      "y": 2828,
+      "w": 390,
+      "h": 844,
+      "title": "10 · Services",
+      "radius": 40
+    },
+    "Activite.dc.html": {
+      "x": 470,
+      "y": 2828,
+      "w": 390,
+      "h": 844,
+      "title": "11 · Activité",
+      "radius": 40
+    },
+    "Profil.dc.html": {
+      "x": 940,
+      "y": 2828,
+      "w": 390,
+      "h": 844,
+      "title": "12 · Profil",
+      "radius": 40
+    },
+    "Securite.dc.html": {
+      "x": 1410,
+      "y": 2828,
+      "w": 390,
+      "h": 844,
+      "title": "13 · Sécurité",
+      "radius": 40
+    },
+    "Confidentialite.dc.html": {
+      "x": 1880,
+      "y": 2828,
+      "w": 390,
+      "h": 844,
+      "title": "14 · Confidentialité",
+      "radius": 40
+    },
+    "Aide.dc.html": {
+      "x": 2350,
+      "y": 2828,
+      "w": 390,
+      "h": 844,
+      "title": "15 · Aide",
+      "radius": 40
+    },
+    "Supprimer.dc.html": {
+      "x": 2820,
+      "y": 2828,
+      "w": 390,
+      "h": 844,
+      "title": "16 · Supprimer",
+      "radius": 40
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Identification.dc.html",
+    "ScanCarte.dc.html",
+    "Selfie.dc.html",
+    "CodePin.dc.html",
+    "Accueil.dc.html",
+    "Notification.dc.html",
+    "Demande.dc.html",
+    "Confirme.dc.html",
+    "Services.dc.html",
+    "Activite.dc.html",
+    "Profil.dc.html",
+    "Securite.dc.html",
+    "Confidentialite.dc.html",
+    "Aide.dc.html",
+    "Supprimer.dc.html"
+  ],
+  "notes": {
+    "row1": {
+      "x": 0,
+      "y": 0,
+      "text": "S'inscrire",
+      "kind": "title1",
+      "maxW": 2270
+    },
+    "row2": {
+      "x": 0,
+      "y": 1264,
+      "text": "Se connecter",
+      "kind": "title1",
+      "maxW": 1800
+    },
+    "row3": {
+      "x": 0,
+      "y": 2528,
+      "text": "Services et profil",
+      "kind": "title1",
+      "maxW": 3210
+    }
+  },
+  "designSystems": []
+}

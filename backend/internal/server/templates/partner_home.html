@@ -1,0 +1,71 @@
+{{template "phead" .}}
+<section class="hero">
+  <div class="wrap hero-in">
+    <div class="hero-text">
+      <span class="pill">Pour les banques, assurances et administrations</span>
+      <h1>Sachez qui est vraiment de l'autre côté.</h1>
+      <p class="lead">Vivant vérifie l'identité de vos clients avec leur carte, leur visage et leur téléphone. Vous l'intégrez en deux appels API.</p>
+      <div class="actions">
+        {{if .Partner}}
+          <a class="btn" href="/partenaires/tableau">Ouvrir mon tableau de bord</a>
+        {{else}}
+          <a class="btn" href="/partenaires/inscription">Commencer gratuitement</a>
+        {{end}}
+        <a class="btn btn-ghost" href="/docs">Lire la documentation</a>
+      </div>
+      <p class="small muted">Clés de test immédiates. Aucune carte bancaire.</p>
+    </div>
+    <div class="hero-code">
+      <div class="code-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="code-title">Créer une vérification</span></div>
+<pre><code>curl {{.Issuer}}/v1/verifications \
+  -H "Authorization: Bearer sk_test_..." \
+  -H "Content-Type: application/json" \
+  -d '{"redirect_url": "https://votre-site.com/retour",
+       "data": ["profile", "nin"]}'
+
+<span class="c-comment"># Réponse</span>
+{
+  "id": "ver_7Kq2...",
+  "status": "pending",
+  "url": "{{.Issuer}}/oauth/authorize/start?..."
+}</code></pre>
+    </div>
+  </div>
+</section>
+
+<section class="wrap section">
+  <h2 class="section-title">Trois étapes</h2>
+  <div class="grid3">
+    <div class="card">
+      <span class="step">1</span>
+      <h3>Créez votre compte</h3>
+      <p>Vous recevez tout de suite vos clés de test.</p>
+    </div>
+    <div class="card">
+      <span class="step">2</span>
+      <h3>Intégrez Vivant</h3>
+      <p>Deux appels API, ou OpenID Connect si vous préférez le standard.</p>
+    </div>
+    <div class="card">
+      <span class="step">3</span>
+      <h3>Passez en production</h3>
+      <p>Nous vérifions votre organisation, puis vous activons sous 48 h.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap section">
+  <div class="band">
+    <div>
+      <h2>Seulement les données dont vous avez besoin</h2>
+      <p class="muted">Vous choisissez les données demandées. La personne les voit et confirme sur son téléphone. Rien n'est partagé sans son accord.</p>
+    </div>
+    <ul class="checks">
+      <li>Identité vérifiée sur la carte nationale</li>
+      <li>Visage comparé et détection du vivant</li>
+      <li>Confirmation sur le téléphone de la personne</li>
+      <li>Identifiant propre à votre service</li>
+    </ul>
+  </div>
+</section>
+{{template "pfoot" .}}

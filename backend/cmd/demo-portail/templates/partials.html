@@ -1,0 +1,31 @@
+{{define "head"}}<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{.Title}} · Portail e-Services (démo)</title>
+<link rel="stylesheet" href="/static/portail.css">
+</head>
+<body>
+<div class="demo-banner">Site de démonstration fictif. Les identités utilisées sont inventées.</div>
+<header class="topbar">
+  <div class="wrap">
+    <a class="site" href="/"><span class="flag" aria-hidden="true"><i></i><i></i><i></i></span>Portail e-Services</a>
+    {{if .LoggedIn}}
+    <form method="post" action="/logout"><button class="link" type="submit">Se déconnecter</button></form>
+    {{end}}
+  </div>
+</header>
+<main class="wrap">
+{{end}}
+
+{{define "foot"}}
+</main>
+<footer class="wrap">Démonstration de l'intégration « Se connecter avec Vivant » (OpenID Connect).</footer>
+</body>
+</html>
+{{end}}
+
+{{define "vivant-button"}}
+<a class="vivant-btn" href="/login"><span class="v">V</span>Se connecter avec Vivant</a>
+{{end}}

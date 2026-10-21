@@ -1,0 +1,17 @@
+{{template "phead" .}}
+<section class="wrap auth">
+  <div class="auth-card">
+    <h1>Connexion</h1>
+    <p class="muted">Accédez à vos clés et à vos statistiques.</p>
+    {{if .Error}}<p class="alert alert-error" role="alert">{{.Error}}</p>{{end}}
+    <form method="post" action="/partenaires/connexion" class="form">
+      <label for="email">E-mail</label>
+      <input id="email" name="email" type="email" value="{{index .Form "email"}}" required autocomplete="email">
+      <label for="password">Mot de passe</label>
+      <input id="password" name="password" type="password" required autocomplete="current-password">
+      <button class="btn btn-block" type="submit">Se connecter</button>
+    </form>
+    <p class="small muted center">Pas encore de compte ? <a href="/partenaires/inscription">Créer un compte</a></p>
+  </div>
+</section>
+{{template "pfoot" .}}

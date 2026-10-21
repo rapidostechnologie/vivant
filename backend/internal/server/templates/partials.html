@@ -1,0 +1,19 @@
+{{define "head"}}<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{.Title}} · {{.AppName}}</title>
+<link rel="stylesheet" href="/static/vivant.css">
+</head>
+<body>
+<main class="card">
+<header class="brand"><span class="logo" aria-hidden="true">V</span><span>{{.AppName}}</span></header>
+{{end}}
+
+{{define "foot"}}
+<footer>Identité numérique vérifiée · Prototype</footer>
+</main>
+</body>
+</html>
+{{end}}

@@ -1,0 +1,18 @@
+{{template "head" .}}
+<section class="hero">
+  <h1>Vos démarches administratives en ligne</h1>
+  <p>Demandez vos documents d'état civil sans vous déplacer. Pour protéger vos données, votre identité est vérifiée avec <strong>Vivant</strong> : personne ne peut faire une demande à votre place.</p>
+  {{if .LoggedIn}}
+  <a class="btn" href="/espace">Accéder à mon espace</a>
+  {{else}}
+  {{template "vivant-button" .}}
+  <p class="muted small">Pas encore de compte Vivant ? Inscrivez-vous en quelques minutes avec votre carte d'identité CEDEAO et votre téléphone.</p>
+  {{end}}
+</section>
+
+<section class="grid">
+  <div class="tile"><h3>Extrait de naissance</h3><p>Copie ou extrait d'acte de naissance.</p></div>
+  <div class="tile"><h3>Casier judiciaire</h3><p>Bulletin n°3, délivré à la personne concernée uniquement.</p></div>
+  <div class="tile"><h3>Certificat de résidence</h3><p>Justificatif de domicile officiel.</p></div>
+</section>
+{{template "foot" .}}

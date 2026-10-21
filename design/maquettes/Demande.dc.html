@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Vivant — Confirmer</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0F1113}a:hover{color:#000000}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 54px 24px 32px; display: flex; flex-direction: column; background: #FFFFFF; color: #0F1113; font-family: 'Outfit', system-ui, sans-serif">
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <a href="Notification.dc.html" aria-label="Fermer" style="width: 44px; height: 44px; margin-left: -8px; display: flex; align-items: center; justify-content: center">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </a>
+    <span style="display: flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: 999px; background: #F2F3F5; color: #0F1113; font-size: 15px; font-weight: 700">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"></circle><path d="M12 9v4l2.5 1.5"></path></svg>
+      2:41
+    </span>
+  </div>
+
+  <div style="margin-top: 18px; display: flex; align-items: center; gap: 14px">
+    <span style="width: 58px; height: 58px; border-radius: 18px; background: #F2F3F5; display: flex; align-items: center; justify-content: center">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0F1113" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10l9-6 9 6M5 10v9M19 10v9M9.5 10v9M14.5 10v9M3 20h18"></path></svg>
+    </span>
+    <div style="display: flex; flex-direction: column">
+      <h1 style="margin: 0; font-size: 28px; line-height: 1.1; font-weight: 800; letter-spacing: -0.6px">S'identifier</h1>
+      <span style="font-size: 16px; color: #5F6368">Portail e-Services</span>
+    </div>
+  </div>
+
+  <h2 style="margin: 28px 0 4px; font-size: 13px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase; color: #5F6368">Données partagées</h2>
+  <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #EEF0F2; font-size: 17px"><span style="color: #5F6368">Nom</span><span style="font-weight: 600">Diop</span></div>
+  <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #EEF0F2; font-size: 17px"><span style="color: #5F6368">Prénom</span><span style="font-weight: 600">Fatou</span></div>
+  <div style="display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #EEF0F2; font-size: 17px"><span style="color: #5F6368">Naissance</span><span style="font-weight: 600">14/03/1990</span></div>
+  <div style="display: flex; justify-content: space-between; padding: 12px 0; font-size: 17px"><span style="color: #5F6368">N° national</span><span style="font-weight: 600">•••• 0123</span></div>
+
+  <div style="flex: 1"></div>
+
+  <p style="margin: 0 0 12px; font-size: 17px; font-weight: 700; text-align: center">Code affiché à l'écran</p>
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+    <button style="height: 70px; border: 2px solid #E6E8EB; border-radius: 20px; background: #FFFFFF; color: #0F1113; font: 800 30px 'Outfit', sans-serif">96</button>
+    <button aria-pressed="true" style="height: 70px; border: 3px solid #34D186; border-radius: 20px; background: #EAFAF2; color: #0F1113; font: 800 30px 'Outfit', sans-serif">42</button>
+    <button style="height: 70px; border: 2px solid #E6E8EB; border-radius: 20px; background: #FFFFFF; color: #0F1113; font: 800 30px 'Outfit', sans-serif">13</button>
+  </div>
+
+  <div style="margin-top: 18px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+    <a href="Accueil.dc.html" style="height: 60px; border-radius: 999px; border: 2px solid #E6E8EB; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 700; text-decoration: none">Refuser</a>
+    <a href="Confirme.dc.html" style="height: 60px; border-radius: 999px; background: #34D186; color: #0F1113; display: flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 800; text-decoration: none">Confirmer</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

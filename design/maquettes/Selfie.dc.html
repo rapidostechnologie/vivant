@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Vivant — Visage</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#FFFFFF}a:hover{color:#7FE3B2}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 60px 28px 56px; display: flex; flex-direction: column; background: #0F1113; color: #FFFFFF; font-family: 'Outfit', system-ui, sans-serif">
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <a href="ScanCarte.dc.html" aria-label="Retour" style="width: 44px; height: 44px; margin-left: -10px; display: flex; align-items: center; justify-content: center">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="display: flex; gap: 6px" aria-label="Étape 3 sur 4">
+      <span style="width: 8px; height: 8px; border-radius: 4px; background: #34D186"></span>
+      <span style="width: 8px; height: 8px; border-radius: 4px; background: #34D186"></span>
+      <span style="width: 22px; height: 8px; border-radius: 4px; background: #34D186"></span>
+      <span style="width: 8px; height: 8px; border-radius: 4px; background: #2E3236"></span>
+    </div>
+    <span style="width: 34px"></span>
+  </div>
+
+  <h1 style="margin: 40px 0 0; font-size: 38px; line-height: 1.05; font-weight: 800; letter-spacing: -1.2px; text-align: center">Regardez ici</h1>
+
+  <div style="flex: 1; display: flex; align-items: center; justify-content: center">
+    <div style="position: relative; width: 300px; height: 300px; display: flex; align-items: center; justify-content: center">
+      <svg width="300" height="300" viewBox="0 0 300 300" aria-hidden="true" style="position: absolute; inset: 0">
+        <circle cx="150" cy="150" r="142" fill="none" stroke="#2E3236" stroke-width="10"></circle>
+        <circle cx="150" cy="150" r="142" fill="none" stroke="#34D186" stroke-width="10" stroke-linecap="round" stroke-dasharray="625 900" transform="rotate(-90 150 150)"></circle>
+      </svg>
+      <div style="width: 262px; height: 262px; border-radius: 50%; background: #1C1F22; display: flex; align-items: flex-end; justify-content: center; overflow: hidden">
+        <svg width="220" height="220" viewBox="0 0 220 220" aria-hidden="true">
+          <circle cx="110" cy="92" r="50" fill="#34393E"></circle>
+          <path d="M22 220c6-50 42-74 88-74s82 24 88 74z" fill="#34393E"></path>
+          <path d="M92 104c5 7 31 7 36 0" fill="none" stroke="#34D186" stroke-width="4" stroke-linecap="round"></path>
+          <circle cx="92" cy="84" r="4.5" fill="#34D186"></circle>
+          <circle cx="128" cy="84" r="4.5" fill="#34D186"></circle>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <p style="margin: 0; font-size: 28px; font-weight: 700; text-align: center">Ne bougez pas</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

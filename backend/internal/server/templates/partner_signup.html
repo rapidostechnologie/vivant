@@ -1,0 +1,32 @@
+{{template "phead" .}}
+<section class="wrap auth">
+  <div class="auth-card">
+    <h1>Créer un compte partenaire</h1>
+    <p class="muted">Vos clés de test sont prêtes en une minute.</p>
+    {{if .Error}}<p class="alert alert-error" role="alert">{{.Error}}</p>{{end}}
+    <form method="post" action="/partenaires/inscription" class="form">
+      <label for="org">Organisation</label>
+      <input id="org" name="org" value="{{index .Form "org"}}" placeholder="Banque Démo" required autocomplete="organization">
+
+      <label for="sector">Secteur</label>
+      <select id="sector" name="sector" required>
+        <option value="">Choisir</option>
+        {{$cur := index .Form "sector"}}
+        {{range .Sectors}}<option value="{{.}}" {{if eq . $cur}}selected{{end}}>{{.}}</option>{{end}}
+      </select>
+
+      <label for="website">Site web <span class="muted">(facultatif)</span></label>
+      <input id="website" name="website" value="{{index .Form "website"}}" placeholder="https://banque-demo.com" inputmode="url">
+
+      <label for="email">E-mail professionnel</label>
+      <input id="email" name="email" type="email" value="{{index .Form "email"}}" required autocomplete="email">
+
+      <label for="password">Mot de passe <span class="muted">(10 caractères minimum)</span></label>
+      <input id="password" name="password" type="password" minlength="10" required autocomplete="new-password">
+
+      <button class="btn btn-block" type="submit">Créer mon compte</button>
+    </form>
+    <p class="small muted center">Déjà inscrit ? <a href="/partenaires/connexion">Se connecter</a></p>
+  </div>
+</section>
+{{template "pfoot" .}}

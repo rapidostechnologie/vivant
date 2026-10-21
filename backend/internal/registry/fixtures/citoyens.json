@@ -1,0 +1,54 @@
+[
+  {
+    "nin": "2751199000123",
+    "family_name": "Diop",
+    "given_names": "Fatou",
+    "birth_date": "1990-03-14",
+    "birth_place": "Dakar",
+    "sex": "F",
+    "nationality": "SEN",
+    "address": "Cité Keur Gorgui, Dakar",
+    "document_number": "A01234567",
+    "document_expiry": "2031-05-20",
+    "sim_phone": "+221771234567"
+  },
+  {
+    "nin": "1752198500456",
+    "family_name": "Ndiaye",
+    "given_names": "Moussa",
+    "birth_date": "1985-11-02",
+    "birth_place": "Saint-Louis",
+    "sex": "M",
+    "nationality": "SEN",
+    "address": "Quartier Sor, Saint-Louis",
+    "document_number": "B09876543",
+    "document_expiry": "2029-08-11",
+    "sim_phone": "+221781112233"
+  },
+  {
+    "nin": "2753200100789",
+    "family_name": "Sow",
+    "given_names": "Aminata Coumba",
+    "birth_date": "2001-07-25",
+    "birth_place": "Thiès",
+    "sex": "F",
+    "nationality": "SEN",
+    "address": "Cité Malick Sy, Thiès",
+    "document_number": "C11223344",
+    "document_expiry": "2033-02-28",
+    "sim_phone": "+221701234567"
+  },
+  {
+    "nin": "1754197800321",
+    "family_name": "Bâ",
+    "given_names": "Mamadou Lamine",
+    "birth_date": "1978-01-09",
+    "birth_place": "Ziguinchor",
+    "sex": "M",
+    "nationality": "SEN",
+    "address": "Boucotte, Ziguinchor",
+    "document_number": "D55667788",
+    "document_expiry": "2025-01-01",
+    "sim_phone": "+221769876543"
+  }
+]

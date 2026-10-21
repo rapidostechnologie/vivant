@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Vivant — Connecté</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#0F1113}a:hover{color:#000000}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 60px 28px 40px; display: flex; flex-direction: column; align-items: center; background: #FFFFFF; color: #0F1113; font-family: 'Outfit', system-ui, sans-serif; text-align: center">
+  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center">
+    <div style="position: relative; width: 240px; height: 240px; display: flex; align-items: center; justify-content: center">
+      <div style="position: absolute; inset: 0; border-radius: 50%; background: #EAFAF2"></div>
+      <div style="position: absolute; inset: 34px; border-radius: 50%; background: #CDF4E0"></div>
+      <div style="position: relative; width: 132px; height: 132px; border-radius: 50%; background: #34D186; display: flex; align-items: center; justify-content: center; box-shadow: 0 16px 34px rgba(52,209,134,0.35)">
+        <svg width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#0F1113" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      </div>
+      <div style="position: absolute; left: 30px; top: 40px; width: 18px; height: 18px; border-radius: 50%; background: #34D186"></div>
+      <div style="position: absolute; right: 26px; bottom: 58px; width: 12px; height: 12px; border-radius: 50%; background: #34D186"></div>
+    </div>
+    <h1 style="margin: 36px 0 0; font-size: 50px; line-height: 1; font-weight: 800; letter-spacing: -1.8px">C'est fait !</h1>
+    <p style="margin: 14px 0 0; font-size: 19px; color: #5F6368">Vous êtes connectée.</p>
+  </div>
+  <a href="Accueil.dc.html" style="width: 100%; display: flex; align-items: center; justify-content: center; height: 62px; border-radius: 999px; background: #0F1113; color: #FFFFFF; font-size: 18px; font-weight: 700; text-decoration: none">OK</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

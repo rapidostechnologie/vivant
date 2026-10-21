@@ -1,0 +1,31 @@
+{{template "head" .}}
+<h1>Bonjour {{.ID.GivenName}}</h1>
+
+<section class="panel">
+  <div class="verified"><span class="check" aria-hidden="true">✓</span>Identité vérifiée par Vivant{{if .ID.Level}} · niveau {{.ID.Level}}{{end}}</div>
+  <dl class="identity">
+    <dt>Nom</dt><dd>{{.ID.FamilyName}}</dd>
+    <dt>Prénoms</dt><dd>{{.ID.GivenName}}</dd>
+    <dt>Date de naissance</dt><dd>{{.ID.BirthDate}}</dd>
+    <dt>Lieu de naissance</dt><dd>{{.ID.BirthPlace}}</dd>
+    <dt>Sexe</dt><dd>{{.ID.Gender}}</dd>
+    <dt>NIN</dt><dd>{{.ID.NIN}}</dd>
+    {{if .ID.Phone}}<dt>Téléphone</dt><dd>{{.ID.Phone}}</dd>{{end}}
+  </dl>
+  <p class="muted small">Connexion confirmée sur le téléphone le {{.ID.AuthTime}}. Ces informations proviennent du registre national et ne peuvent pas être modifiées ici.</p>
+</section>
+
+<section class="panel">
+  <h2>Nouvelle demande</h2>
+  <form method="post" action="/demande">
+    <label for="document">Document</label>
+    <select id="document" name="document">
+      <option value="extrait_naissance">Extrait d'acte de naissance</option>
+      <option value="casier_judiciaire">Bulletin n°3 du casier judiciaire</option>
+      <option value="certificat_residence">Certificat de résidence</option>
+    </select>
+    <p class="muted small">La demande sera faite au nom de <strong>{{.ID.FullName}}</strong>, né(e) le {{.ID.BirthDate}} à {{.ID.BirthPlace}}.</p>
+    <button class="btn" type="submit">Envoyer la demande</button>
+  </form>
+</section>
+{{template "foot" .}}

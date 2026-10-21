@@ -1,0 +1,346 @@
+{{template "phead" .}}
+<div class="wrap docs">
+  <aside class="docs-nav" aria-label="Sommaire">
+    <p class="docs-nav-title">Démarrer</p>
+    <a href="#introduction">Introduction</a>
+    <a href="#demarrage">Démarrage rapide</a>
+    <p class="docs-nav-title">API simple</p>
+    <a href="#creer">Créer une vérification</a>
+    <a href="#resultat">Lire le résultat</a>
+    <a href="#code">Code complet</a>
+    <p class="docs-nav-title">Référence</p>
+    <a href="#donnees">Données disponibles</a>
+    <a href="#erreurs">Erreurs</a>
+    <a href="#oidc">OpenID Connect</a>
+    <a href="#bouton">Bouton</a>
+    <a href="#test">Environnement de test</a>
+    <a href="#securite">Sécurité</a>
+  </aside>
+
+  <article class="docs-body">
+    <section id="introduction">
+      <h1>Documentation</h1>
+      <p class="lead">Vivant vous dit avec certitude qui est votre client : son identité est vérifiée sur sa carte nationale, son visage et son téléphone. Il confirme chaque partage sur son téléphone.</p>
+      <div class="callout">
+        <strong>URL de l'API</strong>
+        <span class="v"><code>{{.Issuer}}</code>{{template "copy" .Issuer}}</span>
+      </div>
+    </section>
+
+    <section id="demarrage">
+      <h2>Démarrage rapide</h2>
+      <ol class="steps">
+        <li><a href="/partenaires/inscription">Créez un compte partenaire</a> et copiez votre <strong>clé secrète</strong> (<code>sk_test_…</code>).</li>
+        <li>Ajoutez l'adresse de retour de votre site dans votre <a href="/partenaires/tableau#retours">tableau de bord</a>.</li>
+        <li>Faites deux appels : <strong>créer</strong> une vérification, puis <strong>lire</strong> le résultat.</li>
+      </ol>
+      <div class="flow">
+        <div class="flow-step"><span>1</span>Votre serveur crée une vérification</div>
+        <div class="flow-step"><span>2</span>Vous redirigez le client vers <code>url</code></div>
+        <div class="flow-step"><span>3</span>Il confirme sur son téléphone</div>
+        <div class="flow-step"><span>4</span>Il revient sur votre site, vous lisez le résultat</div>
+      </div>
+    </section>
+
+    <section id="creer">
+      <h2>Créer une vérification</h2>
+      <p><span class="method">POST</span> <code>/v1/verifications</code></p>
+      <table class="table">
+        <thead><tr><th>Champ</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><code>redirect_url</code></td><td>texte</td><td>Obligatoire. Adresse de retour enregistrée dans votre tableau de bord.</td></tr>
+          <tr><td><code>data</code></td><td>liste</td><td>Données demandées, par exemple <code>["profile", "nin"]</code>. Par défaut : <code>["profile"]</code>.</td></tr>
+          <tr><td><code>reference</code></td><td>texte</td><td>Facultatif. Votre identifiant interne (dossier, client…), renvoyé tel quel.</td></tr>
+        </tbody>
+      </table>
+      <div class="codeblock">
+        <button class="copy" type="button" data-copy-block aria-label="Copier le code">Copier</button>
+<pre><code>curl {{.Issuer}}/v1/verifications \
+  -H "Authorization: Bearer $VIVANT_SECRET_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "redirect_url": "https://votre-site.com/retour",
+    "data": ["profile", "nin"],
+    "reference": "dossier-42"
+  }'</code></pre>
+      </div>
+      <p class="small muted">Réponse <code>201</code> : redirigez le client vers <code>url</code>. Le lien est valable 10 minutes et ne sert qu'une fois.</p>
+<pre class="json"><code>{
+  "id": "ver_7Kq2mXz9...",
+  "status": "pending",
+  "url": "{{.Issuer}}/oauth/authorize/start?req=ver_7Kq2mXz9...&amp;t=...",
+  "expires_at": "2026-10-19T10:40:00Z"
+}</code></pre>
+    </section>
+
+    <section id="resultat">
+      <h2>Lire le résultat</h2>
+      <p>Après sa confirmation, le client revient sur votre adresse de retour :</p>
+<pre class="json"><code>https://votre-site.com/retour?verification_id=ver_7Kq2mXz9...&amp;status=approved</code></pre>
+      <p>Ne vous fiez pas au paramètre <code>status</code> de l'adresse : <strong>lisez toujours le résultat depuis votre serveur</strong>.</p>
+      <p><span class="method method-get">GET</span> <code>/v1/verifications/{id}</code></p>
+      <div class="codeblock">
+        <button class="copy" type="button" data-copy-block aria-label="Copier le code">Copier</button>
+<pre><code>curl {{.Issuer}}/v1/verifications/ver_7Kq2mXz9... \
+  -H "Authorization: Bearer $VIVANT_SECRET_KEY"</code></pre>
+      </div>
+<pre class="json"><code>{
+  "id": "ver_7Kq2mXz9...",
+  "status": "approved",
+  "reference": "dossier-42",
+  "created_at": "2026-10-19T10:30:00Z",
+  "completed_at": "2026-10-19T10:31:12Z",
+  "identity": {
+    "sub": "Xy3k...",
+    "family_name": "Diop",
+    "given_name": "Fatou",
+    "birthdate": "1990-03-14",
+    "gender": "female",
+    "nationalities": ["SEN"],
+    "nin": "2751199000123"
+  }
+}</code></pre>
+      <table class="table">
+        <thead><tr><th>status</th><th>Signification</th></tr></thead>
+        <tbody>
+          <tr><td><code>pending</code></td><td>En attente de la confirmation du client.</td></tr>
+          <tr><td><code>approved</code></td><td>Identité confirmée : <code>identity</code> est rempli.</td></tr>
+          <tr><td><code>denied</code></td><td>Le client a refusé, ou a choisi le mauvais code.</td></tr>
+          <tr><td><code>expired</code></td><td>Le client n'a pas confirmé à temps.</td></tr>
+        </tbody>
+      </table>
+      <p class="small muted"><code>sub</code> est l'identifiant unique de la personne <em>pour votre service</em>. Utilisez-le pour reconnaître un client qui revient.</p>
+    </section>
+
+    <section id="code">
+      <h2>Code complet à copier-coller</h2>
+      <p>Une page « connexion » qui envoie vers Vivant, une page « retour » qui lit l'identité. Remplacez seulement votre clé et votre adresse.</p>
+      <div class="tabs" data-tabs>
+        <div class="tab-list" role="tablist">
+          <button class="tab" type="button" role="tab" data-tab="node" aria-selected="true">Node.js</button>
+          <button class="tab" type="button" role="tab" data-tab="php" aria-selected="false">PHP</button>
+          <button class="tab" type="button" role="tab" data-tab="python" aria-selected="false">Python</button>
+        </div>
+
+        <div class="codeblock" data-panel="node" role="tabpanel">
+          <button class="copy" type="button" data-copy-block aria-label="Copier le code">Copier</button>
+<pre><code>// npm install express   (Node.js 18 ou plus)
+const express = require("express");
+
+const VIVANT_URL = "{{.Issuer}}";
+const SECRET_KEY = process.env.VIVANT_SECRET_KEY; // sk_test_...
+const RETOUR = "http://localhost:3000/retour";
+
+const app = express();
+
+// 1. Le client clique sur « Se connecter avec Vivant »
+app.get("/connexion", async (req, res) => {
+  const r = await fetch(`${VIVANT_URL}/v1/verifications`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${SECRET_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ redirect_url: RETOUR, data: ["profile", "nin"] }),
+  });
+  const verification = await r.json();
+  res.redirect(verification.url);
+});
+
+// 2. Vivant renvoie le client ici après sa confirmation
+app.get("/retour", async (req, res) => {
+  const id = encodeURIComponent(req.query.verification_id);
+  const r = await fetch(`${VIVANT_URL}/v1/verifications/${id}`, {
+    headers: { Authorization: `Bearer ${SECRET_KEY}` },
+  });
+  const v = await r.json();
+
+  if (v.status !== "approved") {
+    return res.send("Vérification non aboutie.");
+  }
+  // Identité vérifiée : v.identity.family_name, v.identity.nin...
+  res.send(`Bienvenue ${v.identity.given_name} ${v.identity.family_name}`);
+});
+
+app.listen(3000);</code></pre>
+        </div>
+
+        <div class="codeblock" data-panel="php" role="tabpanel" hidden>
+          <button class="copy" type="button" data-copy-block aria-label="Copier le code">Copier</button>
+<pre><code>&lt;?php
+// vivant.php : à inclure dans les deux pages
+const VIVANT_URL = "{{.Issuer}}";
+
+function vivant(string $method, string $path, ?array $body = null): array {
+  $ch = curl_init(VIVANT_URL . $path);
+  curl_setopt_array($ch, [
+    CURLOPT_CUSTOMREQUEST  => $method,
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_HTTPHEADER     => [
+      "Authorization: Bearer " . getenv("VIVANT_SECRET_KEY"),
+      "Content-Type: application/json",
+    ],
+    CURLOPT_POSTFIELDS     => $body ? json_encode($body) : null,
+  ]);
+  return json_decode(curl_exec($ch), true);
+}
+
+// connexion.php
+require "vivant.php";
+$v = vivant("POST", "/v1/verifications", [
+  "redirect_url" => "https://votre-site.com/retour.php",
+  "data"         => ["profile", "nin"],
+]);
+header("Location: " . $v["url"]);
+
+// retour.php
+require "vivant.php";
+$v = vivant("GET", "/v1/verifications/" . urlencode($_GET["verification_id"]));
+if ($v["status"] !== "approved") {
+  exit("Vérification non aboutie.");
+}
+echo "Bienvenue " . htmlspecialchars($v["identity"]["given_name"]);</code></pre>
+        </div>
+
+        <div class="codeblock" data-panel="python" role="tabpanel" hidden>
+          <button class="copy" type="button" data-copy-block aria-label="Copier le code">Copier</button>
+<pre><code># pip install flask requests
+import os
+import requests
+from flask import Flask, redirect, request
+
+VIVANT_URL = "{{.Issuer}}"
+HEADERS = {"Authorization": "Bearer " + os.environ["VIVANT_SECRET_KEY"]}
+
+app = Flask(__name__)
+
+
+# 1. Le client clique sur « Se connecter avec Vivant »
+@app.get("/connexion")
+def connexion():
+    r = requests.post(VIVANT_URL + "/v1/verifications", headers=HEADERS, json={
+        "redirect_url": "http://localhost:3000/retour",
+        "data": ["profile", "nin"],
+    })
+    return redirect(r.json()["url"])
+
+
+# 2. Vivant renvoie le client ici après sa confirmation
+@app.get("/retour")
+def retour():
+    vid = request.args["verification_id"]
+    v = requests.get(VIVANT_URL + "/v1/verifications/" + vid, headers=HEADERS).json()
+    if v["status"] != "approved":
+        return "Vérification non aboutie."
+    return "Bienvenue " + v["identity"]["given_name"]
+
+
+app.run(port=3000)</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section id="donnees">
+      <h2>Données disponibles</h2>
+      <p>Activez les données dont vous avez besoin dans votre tableau de bord. Le client les voit avant d'accepter.</p>
+      <table class="table">
+        <thead><tr><th>data</th><th>Champs reçus</th></tr></thead>
+        <tbody>
+          <tr><td><em>toujours</em></td><td><code>sub</code></td></tr>
+          <tr><td><code>profile</code></td><td><code>family_name</code>, <code>given_name</code>, <code>name</code>, <code>birthdate</code>, <code>gender</code>, <code>nationalities</code></td></tr>
+          <tr><td><code>birth</code></td><td><code>place_of_birth.locality</code></td></tr>
+          <tr><td><code>nin</code></td><td><code>nin</code> (numéro d'identification national)</td></tr>
+          <tr><td><code>phone</code></td><td><code>phone_number</code>, <code>phone_number_verified</code></td></tr>
+          <tr><td><code>address</code></td><td><code>address.formatted</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="erreurs">
+      <h2>Erreurs</h2>
+      <p>Les erreurs ont toujours la même forme :</p>
+<pre class="json"><code>{ "error": "invalid_redirect_url", "message": "Cette adresse de retour n'est pas enregistrée." }</code></pre>
+      <table class="table">
+        <thead><tr><th>HTTP</th><th>error</th><th>Que faire</th></tr></thead>
+        <tbody>
+          <tr><td>401</td><td><code>missing_api_key</code></td><td>Ajoutez l'en-tête <code>Authorization: Bearer sk_…</code>.</td></tr>
+          <tr><td>401</td><td><code>invalid_api_key</code></td><td>Vérifiez la clé, ou régénérez-la.</td></tr>
+          <tr><td>400</td><td><code>invalid_redirect_url</code></td><td>Ajoutez l'adresse dans votre tableau de bord.</td></tr>
+          <tr><td>400</td><td><code>unknown_data</code></td><td>Utilisez une donnée de la liste ci-dessus.</td></tr>
+          <tr><td>403</td><td><code>data_not_allowed</code></td><td>Activez cette donnée dans votre tableau de bord.</td></tr>
+          <tr><td>404</td><td><code>not_found</code></td><td>Identifiant inconnu, ou résultat expiré.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="oidc">
+      <h2>OpenID Connect</h2>
+      <p>Vous utilisez déjà une bibliothèque OpenID Connect (Spring Security, Laravel Socialite, Passport, Django, .NET…) ? Vivant est un fournisseur standard : configurez-le avec l'adresse de découverte.</p>
+      <table class="table">
+        <tbody>
+          <tr><td>Découverte</td><td><code>{{.Issuer}}/.well-known/openid-configuration</code></td></tr>
+          <tr><td>client_id</td><td>Votre identifiant public <code>pk_test_…</code></td></tr>
+          <tr><td>client_secret</td><td>Votre clé secrète <code>sk_test_…</code></td></tr>
+          <tr><td>Flux</td><td><code>authorization_code</code> avec PKCE <code>S256</code> (obligatoire)</td></tr>
+          <tr><td>Scopes</td><td><code>openid</code> + les données activées (<code>profile</code>, <code>nin</code>…)</td></tr>
+          <tr><td>Signature</td><td><code>id_token</code> signé en <code>RS256</code></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="bouton">
+      <h2>Bouton « Se connecter avec Vivant »</h2>
+      <p class="preview"><a class="vivant-button" href="#bouton"><svg width="22" height="22" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="11" r="5.5" fill="#0F1113"></circle><path d="M10 21 L24 39 L38 21" fill="none" stroke="#0F1113" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"></path></svg>Se connecter avec Vivant</a></p>
+      <div class="codeblock">
+        <button class="copy" type="button" data-copy-block aria-label="Copier le code">Copier</button>
+<pre><code>&lt;a href="/connexion" class="vivant-button"&gt;
+  &lt;svg width="22" height="22" viewBox="0 0 48 48" aria-hidden="true"&gt;
+    &lt;circle cx="24" cy="11" r="5.5" fill="#0F1113"/&gt;
+    &lt;path d="M10 21 L24 39 L38 21" fill="none" stroke="#0F1113"
+          stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/&gt;
+  &lt;/svg&gt;
+  Se connecter avec Vivant
+&lt;/a&gt;
+
+&lt;style&gt;
+  .vivant-button {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px; border-radius: 999px;
+    background: #34D186; color: #0F1113;
+    font: 600 16px system-ui, sans-serif; text-decoration: none;
+  }
+  .vivant-button:hover { background: #2BBE77; }
+&lt;/style&gt;</code></pre>
+      </div>
+    </section>
+
+    <section id="test">
+      <h2>Environnement de test</h2>
+      <p>Avec une clé <code>sk_test_…</code>, utilisez ces identités fictives. Le téléphone est simulé par l'outil <code>device-sim</code>.</p>
+      <table class="table">
+        <thead><tr><th>Personne</th><th>Téléphone</th><th>NIN</th></tr></thead>
+        <tbody>
+          <tr><td>Fatou Diop</td><td>77 123 45 67</td><td>2751199000123</td></tr>
+          <tr><td>Moussa Ndiaye</td><td>78 111 22 33</td><td>1752198500456</td></tr>
+          <tr><td>Aminata Coumba Sow</td><td>70 123 45 67</td><td>2753200100789</td></tr>
+        </tbody>
+      </table>
+      <div class="codeblock">
+        <button class="copy" type="button" data-copy-block aria-label="Copier le code">Copier</button>
+<pre><code>go run ./cmd/device-sim enroll -nin 2751199000123 -phone 771234567
+go run ./cmd/device-sim watch</code></pre>
+      </div>
+    </section>
+
+    <section id="securite">
+      <h2>Sécurité</h2>
+      <ul class="checks">
+        <li>Gardez la clé secrète sur votre serveur, jamais dans une application mobile ou du JavaScript.</li>
+        <li>Lisez toujours le résultat avec <code>GET /v1/verifications/{id}</code>, depuis votre serveur.</li>
+        <li>Utilisez HTTPS pour vos adresses de retour en production.</li>
+        <li>Régénérez la clé immédiatement si elle a pu fuiter.</li>
+      </ul>
+    </section>
+  </article>
+</div>
+{{template "pfoot" .}}

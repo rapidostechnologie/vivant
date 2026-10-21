@@ -1,0 +1,16 @@
+{{template "head" .}}
+<h1>Connexion à {{.ClientName}}</h1>
+<p class="muted">{{.ClientName}} souhaite vérifier votre identité avec {{.AppName}}.</p>
+<div class="claims">
+  <p>Données demandées :</p>
+  <ul>{{range .Claims}}<li>{{.}}</li>{{end}}</ul>
+</div>
+{{if .Error}}<p class="error" role="alert">{{.Error}}</p>{{end}}
+<form method="post" action="/oauth/authorize">
+  <input type="hidden" name="req" value="{{.ReqID}}">
+  <label for="identifiant">Numéro de téléphone ou NIN</label>
+  <input id="identifiant" name="identifiant" inputmode="numeric" autocomplete="tel" placeholder="77 123 45 67" required autofocus>
+  <button type="submit">Continuer</button>
+</form>
+<p class="muted small">Vous recevrez une demande sur votre téléphone. Aucune donnée n'est transmise sans votre accord.</p>
+{{template "foot" .}}
