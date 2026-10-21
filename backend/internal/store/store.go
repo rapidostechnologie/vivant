@@ -325,6 +325,33 @@ func (m *Memory) UserDevices(userID string) []Device {
 	return out
 }
 
+// RevokeDevice révoque un appareil.
+func (m *Memory) RevokeDevice(id string, at time.Time) error {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	d, ok := m.devices[id]
+	if !ok {
+		return ErrNotFound
+	}
+	if d.RevokedAt == nil {
+		t := at
+		d.RevokedAt = &t
+		m.devices[id] = d
+	}
+	return m.persistLocked()
+}
+
+// ListPartners renvoie tous les partenaires.
+func (m *Memory) ListPartners() []Partner {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	out := make([]Partner, 0, len(m.partners))
+	for _, p := range m.partners {
+		out = append(out, p)
+	}
+	return out
+}
+
 // RevokeUserDevices révoque tous les appareils actifs de l'utilisateur et
 // renvoie leur nombre.
 func (m *Memory) RevokeUserDevices(userID string, at time.Time) (int, error) {

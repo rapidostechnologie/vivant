@@ -43,7 +43,7 @@ Tests : `make test`.
 
 ### 1. Inscription (une seule fois)
 
-1. **NIN et numéro de téléphone** : le numéro doit être enregistré au nom du titulaire chez l'opérateur (identification obligatoire des SIM). Un code est envoyé par SMS.
+1. **Numéro de téléphone** : le registre des SIM (identification obligatoire) donne le titulaire de la puce et son NIN. Un code est envoyé par SMS.
 2. **Code SMS** : prouve que la personne a la puce en main.
 3. **Carte d'identité CEDEAO** : la MRZ (les 3 lignes au verso) est lue et ses chiffres de contrôle vérifiés. La carte doit être valide et correspondre au registre national pour ce NIN.
 4. **Selfie avec détection du vivant** : il est comparé à la photo de référence.
@@ -114,7 +114,7 @@ Inscription, sans authentification :
 
 | Méthode | Chemin | Corps |
 |---|---|---|
-| POST | `/api/v1/enrollments` | `{nin, phone}` |
+| POST | `/api/v1/enrollments` | `{phone, nin?}` |
 | POST | `/api/v1/enrollments/{id}/otp` | `{code}` |
 | POST | `/api/v1/enrollments/{id}/document` | `{mrz, document_image?}` |
 | POST | `/api/v1/enrollments/{id}/selfie` | `{selfie}` (JPEG en base64) |

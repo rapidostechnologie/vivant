@@ -450,3 +450,49 @@ func TestDeviceRequestSignatureRequired(t *testing.T) {
 		t.Fatalf("signature d'une autre clé : statut %d, attendu 401", status)
 	}
 }
+
+func TestEnrollmentWithPhoneOnly(t *testing.T) {
+	e := newTestEnv(t)
+	// Le NIN vient du registre des abonnés : le numéro suffit.
+	start := e.mustPostJSON("/api/v1/enrollments", map[string]string{"phone": "78 111 22 33"}, http.StatusCreated)
+	id := start["enrollment_id"].(string)
+	e.mustPostJSON("/api/v1/enrollments/"+id+"/otp", map[string]string{"code": start["dev_otp"].(string)}, http.StatusOK)
+
+	// En mode développement, la carte de démonstration remplace la caméra.
+	resp, err := http.Get(e.ts.URL + "/api/v1/dev/enrollments/" + id + "/card")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var card map[string]string
+	_ = json.NewDecoder(resp.Body).Decode(&card)
+	resp.Body.Close()
+	if resp.StatusCode != http.StatusOK || !strings.Contains(card["mrz"], "NDIAYE<<MOUSSA") {
+		t.Fatalf("carte de démonstration : %d %v", resp.StatusCode, card)
+	}
+	e.mustPostJSON("/api/v1/enrollments/"+id+"/document", map[string]string{"mrz": card["mrz"]}, http.StatusOK)
+
+	if status, out := e.postJSON("/api/v1/enrollments", map[string]string{"phone": "+221 70 000 00 00"}); status != http.StatusNotFound || out["error"] != "holder_not_found" {
+		t.Errorf("numéro inconnu : %d %v", status, out)
+	}
+}
+
+func TestDeviceRevokeAndServices(t *testing.T) {
+	e := newTestEnv(t)
+	dev := e.enroll("2751199000123")
+	if status, raw := e.signed(dev, "POST", "/api/v1/device/revoke", map[string]string{}); status != http.StatusOK {
+		t.Fatalf("révocation : %d %s", status, raw)
+	}
+	if status, _ := e.signed(dev, "GET", "/api/v1/device/me", nil); status != http.StatusUnauthorized {
+		t.Errorf("appareil révoqué : statut %d, attendu 401", status)
+	}
+	resp, err := http.Get(e.ts.URL + "/api/v1/services")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var services []map[string]string
+	_ = json.NewDecoder(resp.Body).Decode(&services)
+	resp.Body.Close()
+	if len(services) != 1 || services[0]["name"] != "Portail de test" {
+		t.Errorf("services : %v", services)
+	}
+}

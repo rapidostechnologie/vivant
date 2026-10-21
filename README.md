@@ -8,6 +8,7 @@ Identité numérique vérifiée pour l'Afrique : la personne prouve qui elle est
 |---|---|
 | [`docs/MASTER.md`](docs/MASTER.md) | Document maître pour les développeurs |
 | [`backend/`](backend/) | Serveur Go : inscription vérifiée, fournisseur OpenID Connect, API simple et espace partenaires, documentation |
+| [`mobile/`](mobile/) | Application Flutter (Android, iOS) |
 | [`design/maquettes/`](design/maquettes/) | Maquettes de l'application mobile (16 écrans) |
 | [`design/captures/`](design/captures/) | Captures de l'application et de l'espace partenaires |
 
@@ -19,4 +20,4 @@ make server    # http://localhost:8080 (partenaires : /partenaires, documentatio
 make test
 ```
 
-![Application](design/captures/app-connexion.png)
+![Application](design/captures/mobile-connexion.png)

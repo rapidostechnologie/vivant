@@ -82,8 +82,8 @@ Pour les organisations, Vivant est un **fournisseur d'identité** : elles ajoute
 
 ```
 Téléphone            Serveur Vivant                  Sources de référence
-   |  1. NIN + numéro      |                                  |
-   |--------------------->|  le numéro est-il au nom du NIN ? |
+   |  1. numéro           |                                  |
+   |--------------------->|  à qui appartient cette puce ?   |
    |                       |-------------------------------->| registre des SIM (opérateur)
    |  2. code SMS          |                                  |
    |<----------------------|                                  |
@@ -182,6 +182,7 @@ vivant/
 ├── design/
 │   ├── maquettes/              maquettes de l'app (fichiers .dc.html du canevas)
 │   └── captures/               images de l'app et de l'espace partenaires
+├── mobile/                     application Flutter (voir « App mobile » plus bas)
 └── backend/
     ├── cmd/
     │   ├── vivant-server/      le serveur (point d'entrée, variables d'environnement)
@@ -242,11 +243,13 @@ Ne sont **jamais** stockés en clair : codes SMS, clés secrètes des partenaire
 
 | Méthode | Chemin | Corps |
 |---|---|---|
-| POST | `/api/v1/enrollments` | `{nin, phone}` |
+| POST | `/api/v1/enrollments` | `{phone}` (le NIN est trouvé via le registre des SIM ; `nin` reste accepté en option) |
 | POST | `/api/v1/enrollments/{id}/otp` | `{code}` |
 | POST | `/api/v1/enrollments/{id}/document` | `{mrz}` |
 | POST | `/api/v1/enrollments/{id}/selfie` | `{selfie}` (JPEG en base64) |
 | POST | `/api/v1/enrollments/{id}/complete` | `{public_key, device_name, signature}` |
+| GET | `/api/v1/dev/enrollments/{id}/card` | MRZ de démonstration, **uniquement avec `VIVANT_DEV=1`** (remplace la caméra) |
+| GET | `/api/v1/services` | Services où l'on peut se connecter avec Vivant |
 
 ### Appareil (requêtes signées)
 
@@ -258,6 +261,7 @@ En-têtes : `X-Vivant-Device`, `X-Vivant-Timestamp`, et `X-Vivant-Signature`, qu
 | GET | `/api/v1/device/requests` |
 | POST | `/api/v1/device/requests/{id}/approve` : `{binding_code, signature}` |
 | POST | `/api/v1/device/requests/{id}/deny` |
+| POST | `/api/v1/device/revoke` : retire ce téléphone |
 
 ### Partenaires
 
@@ -297,7 +301,7 @@ Avant la production :
 | Stockage | Mémoire + `state.json` | PostgreSQL |
 | Clé de signature | Fichier PEM | HSM |
 | Notification du téléphone | Le téléphone interroge le serveur | Push FCM / APNs |
-| App mobile | `device-sim` en ligne de commande | Application Flutter |
+| App mobile | Flutter (`mobile/`) : carte de démo et selfie fictif, clé logicielle | Caméra MRZ + NFC, preuve de vie, clé dans la puce sécurisée |
 | Validation des partenaires | Bouton « Demander la production » sans suite | Interface d'administration |
 
 Identités de test :
@@ -327,6 +331,30 @@ Ensuite :
 - Ouvrez http://localhost:8081, cliquez « Se connecter avec Vivant », saisissez `77 123 45 67`, puis tapez dans le terminal 3 le code affiché.
 - Pour l'espace partenaires, ouvrez http://localhost:8080/partenaires.
 
+### App mobile (Flutter)
+
+Prérequis : Flutter 3.47 ou plus récent. Le serveur tourne avec `VIVANT_DEV=1` (code SMS et carte de démonstration fournis par l'API, CORS ouvert pour le navigateur).
+
+```bash
+cd mobile
+flutter run --dart-define=VIVANT_API=http://10.0.2.2:8080        # émulateur Android
+flutter run -d chrome --dart-define=VIVANT_API=http://localhost:8080   # navigateur
+flutter test
+```
+
+Inscrivez-vous avec `77 123 45 67`, puis connectez-vous sur http://localhost:8081 : la demande apparaît sur l'accueil de l'app.
+
+| Dossier | Contenu |
+|---|---|
+| `lib/api/` | Client de l'API (requêtes signées) |
+| `lib/crypto/` | Clé ECDSA P-256 du téléphone, messages signés identiques au serveur |
+| `lib/storage/` | Stockage sécurisé (clé, code secret haché PBKDF2) |
+| `lib/screens/onboarding/` | Bienvenue, Numéro, Carte, Visage, Code |
+| `lib/screens/` | Verrou, Accueil, Confirmer, C'est fait, Services, Activité, Profil |
+| `lib/widgets/` | Boutons, pavé numérique, logo, pages |
+
+L'app se verrouille quand elle passe en arrière-plan ; chaque confirmation redemande le code secret.
+
 ### Variables d'environnement
 
 | Variable | Défaut | Rôle |
@@ -336,7 +364,7 @@ Ensuite :
 | `VIVANT_DATA_DIR` | `data-local` | Clés et données persistées |
 | `VIVANT_CLIENTS_FILE` | `config/clients.json` | Services déclarés à la main |
 | `VIVANT_APP_NAME` | `Vivant` | Nom affiché |
-| `VIVANT_DEV` | vide | `1` = codes SMS renvoyés par l'API. **Jamais en production.** |
+| `VIVANT_DEV` | vide | `1` = codes SMS et carte de démo renvoyés par l'API, CORS ouvert. **Jamais en production.** |
 
 ### Tests
 
@@ -385,7 +413,6 @@ Parcours de l'app :
 - **Services et profil** : Services, Activité, Profil, Sécurité, Confidentialité, Aide, Supprimer.
 
 Écarts connus entre les maquettes et le backend :
-- les maquettes lisent le NIN sur la carte, alors que l'API d'inscription le demande encore au premier écran ;
 - le code à 4 chiffres est local au téléphone et n'a pas d'impact serveur.
 
 ## 15. Feuille de route
@@ -394,8 +421,9 @@ Parcours de l'app :
 - Backend complet, OIDC, API simple, espace partenaires, documentation, maquettes, portail de démonstration, simulateur.
 
 **Étape 2 — Pilote**
-- [ ] Application mobile Flutter (MRZ par caméra, NFC, selfie, clé matérielle, PIN et biométrie, push).
-- [ ] NIN lu sur la carte (aligner l'API sur les maquettes).
+- [x] Application mobile Flutter : parcours complet, code secret, confirmation.
+- [ ] App : MRZ par caméra, NFC, vraie preuve de vie, clé matérielle, biométrie, push.
+- [x] Inscription par le seul numéro (NIN trouvé via le registre des SIM).
 - [ ] PostgreSQL, limitation du débit, notifications push.
 - [ ] Interface d'administration (validation des partenaires, clés de production, support).
 - [ ] Prestataire de vérification faciale et fournisseur SMS réels.

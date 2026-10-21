@@ -213,3 +213,24 @@ func (s *Server) handleStart(w http.ResponseWriter, r *http.Request) {
 	s.setBrowserCookie(w, ar.ID, secret, time.Until(ar.ExpiresAt))
 	s.renderLogin(w, http.StatusOK, ar, "")
 }
+
+// handleServices liste les services où l'on peut utiliser Vivant (écran
+// « Services » de l'application). Les partenaires en test n'apparaissent
+// qu'en mode développement.
+func (s *Server) handleServices(w http.ResponseWriter, r *http.Request) {
+	type service struct {
+		Name   string `json:"name"`
+		Sector string `json:"sector,omitempty"`
+	}
+	out := []service{}
+	for _, c := range s.clients {
+		out = append(out, service{Name: c.Name})
+	}
+	for _, p := range s.Store.ListPartners() {
+		if p.Mode == store.PartnerLive || s.cfg.DevMode {
+			out = append(out, service{Name: p.OrgName, Sector: p.Sector})
+		}
+	}
+	slices.SortFunc(out, func(a, b service) int { return strings.Compare(a.Name, b.Name) })
+	writeJSON(w, http.StatusOK, out)
+}

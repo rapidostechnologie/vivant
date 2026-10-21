@@ -16,6 +16,7 @@ import (
 	"log/slog"
 	"math/big"
 	"net/http"
+	"strings"
 	"time"
 
 	"vivant/internal/jwt"
@@ -161,12 +162,15 @@ func (s *Server) routes() *http.ServeMux {
 	mux.HandleFunc("POST /api/v1/enrollments/{id}/document", s.handleEnrollDocument)
 	mux.HandleFunc("POST /api/v1/enrollments/{id}/selfie", s.handleEnrollSelfie)
 	mux.HandleFunc("POST /api/v1/enrollments/{id}/complete", s.handleEnrollComplete)
+	mux.HandleFunc("GET /api/v1/dev/enrollments/{id}/card", s.handleDevCard)
 
 	// API de l'appareil (requêtes signées par la clé du téléphone)
 	mux.HandleFunc("GET /api/v1/device/me", s.deviceAuth(s.handleDeviceMe))
 	mux.HandleFunc("GET /api/v1/device/requests", s.deviceAuth(s.handleDeviceRequests))
 	mux.HandleFunc("POST /api/v1/device/requests/{id}/approve", s.deviceAuth(s.handleApprove))
 	mux.HandleFunc("POST /api/v1/device/requests/{id}/deny", s.deviceAuth(s.handleDeny))
+	mux.HandleFunc("POST /api/v1/device/revoke", s.deviceAuth(s.handleRevoke))
+	mux.HandleFunc("GET /api/v1/services", s.handleServices)
 	return mux
 }
 
@@ -189,6 +193,17 @@ func (s *Server) middleware(next http.Handler) http.Handler {
 		h.Set("Referrer-Policy", "no-referrer")
 		h.Set("Content-Security-Policy", "default-src 'self'; img-src 'self' data:; frame-ancestors 'none'; base-uri 'none'")
 		r.Body = http.MaxBytesReader(w, r.Body, maxBodyBytes)
+		if s.cfg.DevMode && strings.HasPrefix(r.URL.Path, "/api/") {
+			// Développement uniquement : l'application Flutter tourne alors
+			// dans un navigateur, sur une autre origine.
+			h.Set("Access-Control-Allow-Origin", "*")
+			h.Set("Access-Control-Allow-Headers", "Content-Type, X-Vivant-Device, X-Vivant-Timestamp, X-Vivant-Signature")
+			h.Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+			if r.Method == http.MethodOptions {
+				w.WriteHeader(http.StatusNoContent)
+				return
+			}
+		}
 		rec := &statusRecorder{ResponseWriter: w, status: http.StatusOK}
 		next.ServeHTTP(rec, r)
 		s.Logger.Info("http", "methode", r.Method, "chemin", r.URL.Path, "statut", rec.status,

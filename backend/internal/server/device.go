@@ -223,3 +223,15 @@ func (s *Server) clientName(id string) string {
 	}
 	return id
 }
+
+// handleRevoke désactive ce téléphone (suppression du compte sur l'appareil).
+// Une nouvelle inscription avec la carte sera nécessaire.
+func (s *Server) handleRevoke(w http.ResponseWriter, r *http.Request, dev store.Device, user store.User, _ []byte) {
+	if err := s.Store.RevokeDevice(dev.ID, s.Now()); err != nil {
+		s.writeError(w, err)
+		return
+	}
+	s.audit(store.AuditEvent{Type: "device_revoked", UserID: user.ID, DeviceID: dev.ID,
+		Detail: "Téléphone « " + dev.Name + " » désactivé par son titulaire"})
+	writeJSON(w, http.StatusOK, map[string]string{"status": "revoked"})
+}

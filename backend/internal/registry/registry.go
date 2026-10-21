@@ -38,6 +38,8 @@ type Citizen struct {
 // Registry interroge la source d'identité de référence.
 type Registry interface {
 	LookupByNIN(ctx context.Context, nin string) (Citizen, error)
+	// LookupByPhone donne le titulaire d'une puce (registre des abonnés).
+	LookupByPhone(ctx context.Context, phone string) (Citizen, error)
 }
 
 //go:embed fixtures/citoyens.json
@@ -75,6 +77,15 @@ func (m *Mock) LookupByNIN(_ context.Context, nin string) (Citizen, error) {
 		return Citizen{}, ErrNotFound
 	}
 	return c, nil
+}
+
+func (m *Mock) LookupByPhone(_ context.Context, phone string) (Citizen, error) {
+	for _, c := range m.byNIN {
+		if c.SIMPhone == phone {
+			return c, nil
+		}
+	}
+	return Citizen{}, ErrNotFound
 }
 
 // SimulatedCardMRZ produit la MRZ imprimée sur la carte physique du citoyen.

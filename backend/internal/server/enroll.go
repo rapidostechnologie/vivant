@@ -19,8 +19,9 @@ import (
 
 // Parcours d'inscription :
 //
-//  1. NIN + numéro de téléphone : le numéro doit être enregistré au nom du
-//     titulaire chez l'opérateur. Un code est envoyé par SMS.
+//  1. Numéro de téléphone : le registre des SIM donne le titulaire de la
+//     puce (le NIN, s'il est fourni, doit correspondre). Un code est envoyé
+//     par SMS.
 //  2. Code SMS : prouve la possession de la puce.
 //  3. Carte d'identité (MRZ) : les données doivent correspondre au registre.
 //  4. Selfie : détection du vivant et comparaison avec la photo de référence.
@@ -85,30 +86,39 @@ func (s *Server) handleEnrollStart(w http.ResponseWriter, r *http.Request) {
 		s.writeError(w, err)
 		return
 	}
-	nin := phone.Digits(req.NIN)
-	if len(nin) != 13 {
-		s.writeError(w, newAPIError(http.StatusBadRequest, "invalid_nin", "Le NIN doit comporter 13 chiffres."))
-		return
-	}
 	tel, err := phone.Normalize(req.Phone)
 	if err != nil {
 		s.writeError(w, newAPIError(http.StatusBadRequest, "invalid_phone", "Numéro de téléphone invalide."))
 		return
 	}
-	citizen, err := s.Registry.LookupByNIN(r.Context(), nin)
+	// Le NIN est facultatif : le registre des abonnés de l'opérateur donne le
+	// titulaire de la puce, et la carte d'identité le confirme ensuite.
+	var citizen registry.Citizen
+	if req.NIN != "" {
+		nin := phone.Digits(req.NIN)
+		if len(nin) != 13 {
+			s.writeError(w, newAPIError(http.StatusBadRequest, "invalid_nin", "Le NIN doit comporter 13 chiffres."))
+			return
+		}
+		citizen, err = s.Registry.LookupByNIN(r.Context(), nin)
+		if err == nil && citizen.SIMPhone != tel {
+			s.writeError(w, newAPIError(http.StatusForbidden, "phone_mismatch",
+				"Ce numéro n'est pas enregistré au nom du titulaire de ce NIN. Utilisez la puce enregistrée à votre nom."))
+			return
+		}
+	} else {
+		citizen, err = s.Registry.LookupByPhone(r.Context(), tel)
+	}
 	if errors.Is(err, registry.ErrNotFound) {
-		s.writeError(w, newAPIError(http.StatusNotFound, "nin_not_found", "Ce NIN est introuvable dans le registre national."))
+		s.writeError(w, newAPIError(http.StatusNotFound, "holder_not_found",
+			"Ce numéro n'est enregistré au nom de personne. Utilisez la puce enregistrée à votre nom."))
 		return
 	}
 	if err != nil {
 		s.writeError(w, err)
 		return
 	}
-	if citizen.SIMPhone != tel {
-		s.writeError(w, newAPIError(http.StatusForbidden, "phone_mismatch",
-			"Ce numéro n'est pas enregistré au nom du titulaire de ce NIN. Utilisez la puce enregistrée à votre nom."))
-		return
-	}
+	nin := citizen.NIN
 
 	now := s.Now()
 	otp := randomDigits(6)
@@ -405,4 +415,29 @@ func (s *Server) handleEnrollComplete(w http.ResponseWriter, r *http.Request) {
 			"birth_date":  user.Identity.BirthDate,
 		},
 	})
+}
+
+// handleDevCard renvoie la MRZ de la carte du titulaire (mode développement
+// uniquement) : elle remplace la caméra pour tester l'application.
+func (s *Server) handleDevCard(w http.ResponseWriter, r *http.Request) {
+	if !s.cfg.DevMode {
+		s.writeError(w, store.ErrNotFound)
+		return
+	}
+	e, ok := s.Store.GetEnrollment(r.PathValue("id"))
+	if !ok {
+		s.writeError(w, store.ErrNotFound)
+		return
+	}
+	c, err := s.Registry.LookupByNIN(r.Context(), e.NIN)
+	if err != nil {
+		s.writeError(w, err)
+		return
+	}
+	card, err := registry.SimulatedCardMRZ(c)
+	if err != nil {
+		s.writeError(w, err)
+		return
+	}
+	writeJSON(w, http.StatusOK, map[string]string{"mrz": card})
 }
